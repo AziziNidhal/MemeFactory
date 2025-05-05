@@ -1,7 +1,6 @@
 import { vi } from "vitest";
 import { act, fireEvent, waitFor, screen } from "@testing-library/react";
 import { renderWithRouter } from "../utils";
-import { LoginPage } from "../../routes/login";
 import {
   AuthenticationContext,
   AuthenticationState,
@@ -9,6 +8,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ListenerFn, RouterEvents } from "@tanstack/react-router";
+import { LoginPage } from "../../features/auth/pages/LoginPage";
 
 type RenderLoginPageParams = {
   authenticate?: (token: string) => void;
@@ -99,7 +99,7 @@ describe("routes/login", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(/an unknown error occured, please try again later/i),
+          screen.getByText(/an unknown error occurred, please try again later/i),
         ).toBeInTheDocument();
       });
     });
