@@ -1,7 +1,7 @@
+import axios from "axios";
+import { axiosInstance } from "./lib/axios";
 import { MemeText } from "./types/MemeText";
-import { fetchWithAuth } from "./utils/fetchWithAuth";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 export class UnauthorizedError extends Error {
   constructor() {
@@ -36,13 +36,26 @@ export type LoginResponse = {
  * @returns 
  */
 export async function login(username: string, password: string): Promise<LoginResponse> {
-  return await fetch(`${BASE_URL}/authentication/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ username, password }),
-  }).then(res => checkStatus(res).json())
+  try {
+    const response = await axiosInstance.post("/authentication/login", {
+      username,
+      password,
+    });
+
+    return response.data; // Axios parses JSON automatically
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        throw new UnauthorizedError(); // 👈 Required for useMutation `error` to work
+      }
+
+      // Optionally handle other status codes
+      throw new Error(`Login failed with status ${error.response?.status}`);
+    }
+
+    throw new Error("Unexpected error during login");
+  }
+
 }
 
 export type GetUserByIdResponse = {
@@ -56,8 +69,9 @@ export type GetUserByIdResponse = {
  * @param id 
  * @returns 
  */
-export async function getUserById( id: string): Promise<GetUserByIdResponse> {
-  return await fetchWithAuth(`${BASE_URL}/users/${id}`).then(res => checkStatus(res).json())
+export async function getUserById(id: string): Promise<GetUserByIdResponse> {
+  const response = await axiosInstance.get<GetUserByIdResponse>(`/users/${id}`);
+  return response.data;
 }
 
 export type GetUsersByIdsResponse = {
@@ -71,9 +85,10 @@ export type GetUsersByIdsResponse = {
  * @param id 
  * @returns 
  */
-export async function getUsersByIds( ids: string[]): Promise<GetUsersByIdsResponse> {
+export async function getUsersByIds(ids: string[]): Promise<GetUsersByIdsResponse> {
   const queryString = ids.map(id => `ids=${id}`).join("&");
-  return await fetchWithAuth(`${BASE_URL}/users?${queryString}`).then(res => checkStatus(res).json());
+  const response = await axiosInstance.get<GetUsersByIdsResponse>(`/users?${queryString}`);
+  return response.data;
 }
 
 
@@ -100,11 +115,10 @@ export type GetMemesResponse = {
  * @param page 
  * @returns 
  */
-export async function getMemes( page: number): Promise<GetMemesResponse> {
-  return await fetchWithAuth(`${BASE_URL}/memes?page=${page}`).then(res => checkStatus(res).json())
+export async function getMemes(page: number): Promise<GetMemesResponse> {
+  const response = await axiosInstance.get<GetMemesResponse>(`/memes?page=${page}`);
+  return response.data;
 }
-
-
 
 export type GetMemeCommentsResponse = {
   total: number;
@@ -124,7 +138,8 @@ export type GetMemeCommentsResponse = {
  * @returns
  */
 export async function getMemeComments( memeId: string, page: number): Promise<GetMemeCommentsResponse> {
-  return await fetchWithAuth(`${BASE_URL}/memes/${memeId}/comments?page=${page}`).then(res => checkStatus(res).json())
+  const response = await axiosInstance(`/memes/${memeId}/comments?page=${page}`);
+  return response.data;
 }
 
 export type CreateCommentResponse = {
@@ -140,11 +155,16 @@ export type CreateCommentResponse = {
  * @param memeId
  * @param content
  */
-export async function createMemeComment( memeId: string, content: string): Promise<CreateCommentResponse> {
-  return await fetchWithAuth(`${BASE_URL}/memes/${memeId}/comments`, {
-    method: 'POST',
-    body: JSON.stringify({ content }),
-  }).then(res => checkStatus(res).json());
+export async function createMemeComment(
+  memeId: string,
+  content: string
+): Promise<CreateCommentResponse> {
+  const response = await axiosInstance.post<CreateCommentResponse>(
+    `/memes/${memeId}/comments`,
+    { content } 
+  );
+
+  return response.data;
 }
 
 
@@ -168,22 +188,30 @@ export type CreateMemeResponse = {
  * @param memeId
  * @param content
  */
-export async function createMeme( picture: File, description: string, texts:MemeText[]): Promise<CreateMemeResponse> {
+export async function createMeme(
+  picture: File,
+  description: string,
+  texts: MemeText[]
+): Promise<CreateMemeResponse> {
   const formData = new FormData();
-  formData.append('picture', picture); //  binary file
-  formData.append('description', description);
+  formData.append("picture", picture);
+  formData.append("description", description);
+
   texts.forEach((text, index) => {
     formData.append(`Texts[${index}][Content]`, text.content);
     formData.append(`Texts[${index}][X]`, text.x.toString());
     formData.append(`Texts[${index}][Y]`, text.y.toString());
   });
 
- 
-  return await fetchWithAuth(`${BASE_URL}/memes`, {
-    method: 'POST',
-    body: formData,
-  }).then(res => checkStatus(res).json()).catch((err) => {
-    console.error(err);
-    throw err;
-  });
+  const response = await axiosInstance.post<CreateMemeResponse>(
+    `/memes`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data;
 }

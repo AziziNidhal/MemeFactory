@@ -59,7 +59,7 @@ const comments = [
 
 export const handlers = [
   http.post<{}, { username: string; password: string }>(
-    "https://fetestapi.int.mozzaik365.net/api/authentication/login",
+    "/api/authentication/login",
     async ({ request }) => {
       const { username, password } = await request.json();
       if (username === "valid_user" && password === "password") {
@@ -78,7 +78,7 @@ export const handlers = [
     },
   ),
   http.get<{ id: string }>(
-    "https://fetestapi.int.mozzaik365.net/api/users/:id",
+    "/api/users/:id",
     async ({ params }) => {
       const user = users[params.id as keyof typeof users];
       if (user) {
@@ -89,7 +89,17 @@ export const handlers = [
       });
     },
   ),
-  http.get("https://fetestapi.int.mozzaik365.net/api/memes", async () => {
+  http.get("/api/users", async ({ request }) => {
+    const url = new URL(request.url);
+    const ids = url.searchParams.getAll("ids");
+  
+    const foundUsers = ids
+      .map(id => users[id as keyof typeof users])
+      .filter(Boolean);
+  
+    return HttpResponse.json(foundUsers);
+  }),
+  http.get("/api/memes", async () => {
     return HttpResponse.json({
       total: memes.length,
       pageSize: memes.length,
@@ -97,11 +107,13 @@ export const handlers = [
     });
   }),
   http.get<{ id: string }>(
-    "https://fetestapi.int.mozzaik365.net/api/memes/:id/comments",
+    "/api/memes/:id/comments",
     async ({ params }) => {
       const memeComments = comments.filter(
         (comment) => comment.memeId === params.id,
       );
+      console.log("🐞 comments called with memeId:", params.id); // <--
+
       return HttpResponse.json({
         total: memeComments.length,
         pageSize: memeComments.length,
