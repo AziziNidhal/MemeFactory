@@ -1,4 +1,4 @@
-import { User } from "./User"
+import { User } from "../../user/types/User"
 
 export type Comment = {
     memeId:string;

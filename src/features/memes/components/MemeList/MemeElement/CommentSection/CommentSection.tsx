@@ -2,10 +2,10 @@ import { Avatar, Box, Collapse, Flex, Icon, Input, LinkBox, LinkOverlay, Text, u
 import { CaretDown, CaretUp, Chat } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import React, { useRef, useState } from "react";
-import { createMemeComment } from "../../../../api";
-import { useUserInfo } from "../../../../contexts/authentication";
 
 import CommentList, { CommentListHandle } from "./CommentList/CommentList";
+import { createMemeComment } from "../../../../api/createComment";
+import { useUserInfo } from "../../../../../../contexts/authentication";
 
 interface CommentSectionProps {
     memeId: string;

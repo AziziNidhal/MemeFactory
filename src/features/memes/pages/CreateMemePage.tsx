@@ -9,15 +9,15 @@ import {
     Textarea,
     useToast,
   } from "@chakra-ui/react";
-  import { MemeEditor } from "../../components/CreateMeme/MemeEditor";
+  import { MemeEditor } from "../components/CreateMeme/MemeEditor";
   import { useMemo, useState, useCallback } from "react";
-  import { MemePictureProps } from "../../components/Common/MemePicture";
+  import { MemePictureProps } from "../components/MemePicture";
   import { Plus } from "@phosphor-icons/react";
   import { Link, useNavigate } from "@tanstack/react-router";
-  import { createMeme } from "../../api";
-  import { ErrorResponse, errorResponseToString } from "../../types/Error";
-import { CaptionControls } from "../../components/CreateMeme/CaptionControls";
-import { Picture } from "../../types/Picture";
+  import { ErrorResponse, errorResponseToString } from "../../../types/Error";
+import { CaptionControls } from "../components/CreateMeme/CaptionControls";
+import { Picture } from "../types/Picture";
+import { createMeme } from "../api/createMeme";
 
   
   const CreateMemePage: React.FC = () => {
@@ -80,12 +80,15 @@ import { Picture } from "../../types/Picture";
         });
         navigate({ to: "/" });
       } catch (error) {
+         alert("Error: Meme creation failed!");
         if (
           typeof error === "object" &&
           error !== null &&
           "title" in error &&
           "errors" in error
         ) {
+
+          alert("Error: Meme creation failed2!");
           const msg = errorResponseToString(error as ErrorResponse);
           toast({
             title: "Error",

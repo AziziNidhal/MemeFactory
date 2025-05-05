@@ -1,9 +1,9 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { Avatar, Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { format } from "timeago.js";
-import { useInfiniteGetCommentsWithAuthor } from "../../../../../hooks/useInfiniteGetCommentsWithAuthor";
 import { Link } from "@tanstack/react-router";
-import { Loader } from "../../../../Common/loader";
+import { useInfiniteGetCommentsWithAuthor } from "../../../../../hooks/useInfiniteGetCommentsWithAuthor";
+import { Loader } from "../../../../../../../components/loader";
 
 interface CommentListProps {
     memeId: string;

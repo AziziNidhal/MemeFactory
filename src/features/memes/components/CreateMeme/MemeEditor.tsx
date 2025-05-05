@@ -1,7 +1,7 @@
 import { useDropzone } from "react-dropzone";
-import { MemePicture, MemePictureProps } from "../Common/MemePicture";
 import { AspectRatio, Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
 import { Image, Pencil } from "@phosphor-icons/react";
+import { MemePicture, MemePictureProps } from "../MemePicture";
 
 export type MemeEditorProps = {
   onDrop: (file: File) => void;

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Meme, MemeWithAuthor } from "../types/Meme";
-import { getMemes, getUsersByIds } from "../api";
+import { getMemes } from "../api/getMemes";
+import { getUsersByIds } from "../../user/api/getUsersByIds";
 
 type UseMemesWithAuthorOutput = {
     items: MemeWithAuthor[],

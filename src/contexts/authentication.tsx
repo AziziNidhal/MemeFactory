@@ -8,8 +8,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { getUserById } from "../api";
-import { User } from "../types/User";
+import { User } from "../features/user/types/User";
+import { getUserById } from "../features/user/api/getUserById";
 
 export type AuthenticationState =
   | {

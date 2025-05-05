@@ -1,5 +1,5 @@
 import { MemeText } from "./MemeText"
-import { User } from "./User"
+import { User } from "../../user/types/User"
 
 export type Meme = {
     id: string,

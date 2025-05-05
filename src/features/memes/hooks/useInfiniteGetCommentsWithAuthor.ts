@@ -1,8 +1,9 @@
 import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { getMemeComments, GetMemeCommentsResponse, getUsersByIds } from '../api';
 import { Comment } from '../types/Comment'; // Ensure the correct Comment type is imported
-import { User } from '../types/User';
+import { User } from '../../user/types/User';
 import { CommentWithAuthor } from '../types/Comment';
+import { getMemeComments, GetMemeCommentsResponse } from '../api/getComments';
+import { getUsersByIds } from '../../user/api/getUsersByIds';
 
 type UseGetCommentsWithAuthorOutput = {
   commentsWithAuthors: CommentWithAuthor[] | undefined;

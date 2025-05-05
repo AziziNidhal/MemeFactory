@@ -9,7 +9,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { CaretDown, CaretUp, SignOut } from "@phosphor-icons/react";
-import { useAuthentication, useUserInfo } from "../contexts/authentication";
+import { useAuthentication, useUserInfo } from "../../../contexts/authentication";
 
 export const UserDropdown: React.FC = () => {
   const { state, signout } = useAuthentication();

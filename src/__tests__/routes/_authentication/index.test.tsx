@@ -4,7 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { AuthenticationContext } from "../../../contexts/authentication";
 import { renderWithRouter } from "../../utils";
-import MemeFeedPage from "../../../pages/MemeFeedPage/MemeFeedPage";
+import MemeFeedPage from "../../../features/memes/pages/MemeFeedPage";
 
 beforeAll(() => {
   class IntersectionObserverMock {

@@ -1,6 +1,6 @@
 import { Box, Text, useDimensions } from "@chakra-ui/react";
 import { useMemo, useRef } from "react";
-import { MemeText } from "../../types/MemeText";
+import { MemeText } from "../types/MemeText";
 
 export type MemePictureProps = {
   pictureUrl: string;

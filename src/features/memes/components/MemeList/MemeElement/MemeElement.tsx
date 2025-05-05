@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import { MemeWithAuthor } from "../../../types/Meme";
 import { Avatar, Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { format } from "timeago.js";
-import { MemePicture } from "../../Common/MemePicture";
+import { MemePicture } from "../../MemePicture";
 import CommentSection from "./CommentSection/CommentSection";
 
 interface MemeElementProps {

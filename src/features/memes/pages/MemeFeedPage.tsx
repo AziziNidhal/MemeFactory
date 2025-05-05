@@ -5,11 +5,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import MemeList from "../../components/MemeList/MemeList";
+import MemeList from "../components/MemeList/MemeList";
 import { useEffect, useRef } from "react";
 
-import { usePaginatedMemesWithAuthor } from "../../hooks/usePaginatedMemesWithAuthor";
-import { Loader } from "../../components/Common/loader";
+import { usePaginatedMemesWithAuthor } from "../hooks/usePaginatedMemesWithAuthor";
+import { Loader } from "../../../components/loader";
 
 
 const MemeFeedPage: React.FC = () => {
